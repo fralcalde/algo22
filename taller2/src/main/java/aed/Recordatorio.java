@@ -45,7 +45,7 @@ public class Recordatorio {
 
         Recordatorio rh = (Recordatorio) otro;
         
-        boolean res = (this.mensaje == rh.mensaje)
+        boolean res = (this.mensaje.equals(rh.mensaje))
             && (this.fecha.equals(rh.fecha))
             && (this.horario.equals(rh.horario));
 
