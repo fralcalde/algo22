@@ -11,6 +11,12 @@ public class Recordatorio {
         this.horario = new Horario(horario);
     }
 
+		public Recordatorio(Recordatorio rh) {
+			this.mensaje = new String(rh.mensaje);
+			this.fecha = new Fecha(rh.fecha);
+			this.horario = new Horario(rh.horario);
+		}
+
     public Horario horario() {
         return new Horario(this.horario);
     }
