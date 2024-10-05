@@ -192,6 +192,25 @@ class ListaEnlazadaTests {
 
     }
 
+		@Test
+		void copiarListaVaciaConstructor() {
+			ListaEnlazada<Integer> lista = new ListaEnlazada<>();
+			ListaEnlazada<Integer> copiaDeLista = new ListaEnlazada<>(lista);
+
+			assertEquals(0, copiaDeLista.longitud());
+
+			// Test de aliasing
+			lista.agregarAtras(1);
+			assertEquals(0, copiaDeLista.longitud());
+
+			// Agregar y obtener
+			copiaDeLista.agregarAtras(100);
+			copiaDeLista.agregarAtras(10);
+			assertEquals(copiaDeLista.obtener(0), 100);
+			assertEquals(copiaDeLista.obtener(1), 10);
+			assertEquals(copiaDeLista.longitud(), 2);
+		}
+
     @Test
     void listaDeElemComplejo() {
         class Punto2D {

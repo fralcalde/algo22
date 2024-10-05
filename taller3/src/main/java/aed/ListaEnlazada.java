@@ -92,6 +92,16 @@ public class ListaEnlazada<T> implements Secuencia<T> {
 			if(siguiente != null) {
 				siguiente.anterior = anterior;
 			}
+
+			// Si se eliminan los bordes de la lista, se deben actualizar los punteros
+			// "primero" o "ultimo";
+			if(actual == this.primero) {
+				this.primero = actual.siguiente;
+			}
+
+			if(actual == this.ultimo) {
+				this.ultimo = actual.anterior;
+			}
     }
 
     public void modificarPosicion(int indice, T elem) {
@@ -106,19 +116,36 @@ public class ListaEnlazada<T> implements Secuencia<T> {
     }
 
     public ListaEnlazada(ListaEnlazada<T> lista) {
-        throw new UnsupportedOperationException("No implementada aun");
+			ListaIterador it = (ListaIterador) lista.iterador();
+
+			if(lista.longitud() > 0) {
+				while(it.haySiguiente()) {
+					this.agregarAtras(it.siguiente());
+				}
+
+				this.agregarAtras(it.siguiente());
+			}
     }
     
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("No implementada aun");
+			String res = "[";
+			ListaIterador it = (ListaIterador) this.iterador();
+
+			while(it.haySiguiente()) {
+				res = res + String.format("%s, ", it.siguiente());
+			}
+
+			// res = res + String.format("%s]", it.siguiente());
+
+			return res;
     }
 
     private class ListaIterador implements Iterador<T> {
     	private Nodo actual;
 
 			public boolean haySiguiente() {
-				boolean res = this.actual != null && this.actual.siguiente != null;
+				boolean res = this.actual != null; // && this.actual.siguiente != null;
 				return res;
 			}
 			
