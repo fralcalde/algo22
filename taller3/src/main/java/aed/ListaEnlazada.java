@@ -122,8 +122,6 @@ public class ListaEnlazada<T> implements Secuencia<T> {
 				while(it.haySiguiente()) {
 					this.agregarAtras(it.siguiente());
 				}
-
-				this.agregarAtras(it.siguiente());
 			}
     }
     
@@ -133,10 +131,14 @@ public class ListaEnlazada<T> implements Secuencia<T> {
 			ListaIterador it = (ListaIterador) this.iterador();
 
 			while(it.haySiguiente()) {
-				res = res + String.format("%s, ", it.siguiente());
-			}
+				res = res + String.format("%s", it.siguiente());
 
-			// res = res + String.format("%s]", it.siguiente());
+				if(it.haySiguiente()) {
+					res = res + ", ";
+				} else {
+					res = res + "]";
+				}
+			}
 
 			return res;
     }
@@ -145,7 +147,7 @@ public class ListaEnlazada<T> implements Secuencia<T> {
     	private Nodo actual;
 
 			public boolean haySiguiente() {
-				boolean res = this.actual != null; // && this.actual.siguiente != null;
+				boolean res = hayValor(); // && this.actual.siguiente != null;
 				return res;
 			}
 			
@@ -154,18 +156,30 @@ public class ListaEnlazada<T> implements Secuencia<T> {
 				return res;
 			}
 
+			private boolean hayValor() {
+				boolean res = this.actual != null && this.actual.valor != null;
+				return res;
+			}
+
 			public T siguiente() {
 				T res = null;
 
-				if(this.actual != null){
+				if(hayValor()) {
 					res = this.actual.valor;
 				}
 
-				if(haySiguiente()) {
+				// Esta condición sería la verdadera haySiguiente
+				if(this.actual.siguiente != null) {
 					this.actual = this.actual.siguiente;
-				}
-				else {
-					this.actual = null;
+				} else {
+					// Fabricando un nodo vacío que apunte al nodo anterior
+					// logro mantener la funcionalidad de anterior()
+					Nodo vacio = new Nodo();
+					vacio.anterior = this.actual;
+					vacio.valor = null;
+					vacio.siguiente = null;
+
+					this.actual = vacio;
 				}
 
 				return res;
@@ -174,15 +188,9 @@ public class ListaEnlazada<T> implements Secuencia<T> {
 			public T anterior() {
 				T res = null;
 
-				if(this.actual != null) {
-					res = this.actual.valor;
-				}
-
 				if(hayAnterior()){
 					this.actual = this.actual.anterior;
-				}
-				else {
-					this.actual = null;
+					res = this.actual.valor;
 				}
 
 				return res;
